@@ -8,18 +8,14 @@ import {
   LatestInvoiceRaw,
   User,
   Revenue,
+  Customer,
 } from './definitions';
 import { formatCurrency } from './utils';
 
 export async function fetchRevenue() {
   noStore()
-  // Add noStore() here to prevent the response from being cached.
-  // This is equivalent to in fetch(..., {cache: 'no-store'}).
 
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
     console.log('Fetching revenue data...');
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -169,7 +165,6 @@ export async function fetchInvoiceById(id: string) {
       amount: invoice.amount / 100,
     }));
 
-    console.log(invoice)
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -180,10 +175,12 @@ export async function fetchInvoiceById(id: string) {
 export async function fetchCustomers() {
   noStore()
   try {
-    const data = await sql<CustomerField>`
+    const data = await sql<Customer>`
       SELECT
         id,
-        name
+        name,
+        email,
+        image_url
       FROM customers
       ORDER BY name ASC
     `;
